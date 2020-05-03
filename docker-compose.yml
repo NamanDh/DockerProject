@@ -1,0 +1,31 @@
+version: '3'
+services:
+    backendos: 
+       image: mysql:5.7
+       volumes:
+           - mysql_data:/var/lib/mysql
+       restart: always
+       environment:
+             MYSQL_ROOT_PASSWORD: redhat
+             MYSQL_USER: john        
+             MYSQL_PASSWORD: red 
+             MYSQL_DATABASE: mynewdata   
+
+    joomlaos:
+       image: joomla:latest
+       restart: always
+       depends_on:
+           - backendos
+       ports:
+           - 8680:80
+       environment:
+             JOOMLA_DB_HOST: backendos
+             JOOMLA_DB_USER: john       
+             JOOMLA_DB_PASSWORD: red
+             JOOMLA_DB_NAME: mynewdata  
+       volumes: 
+           - joomla_store:/var/www/html
+
+volumes:  
+    joomla_store:
+    mysql_data:
